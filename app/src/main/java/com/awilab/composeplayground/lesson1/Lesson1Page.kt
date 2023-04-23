@@ -3,7 +3,8 @@ package com.awilab.composeplayground.lesson1
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
@@ -56,7 +57,7 @@ fun Greeting(name: String) {
 }
 
 @Composable
-fun Lesson1Page(
+fun Greetings(
     modifier: Modifier = Modifier,
     names: List<String> = listOf("World", "Compose")
 ) {
@@ -68,6 +69,23 @@ fun Lesson1Page(
             for (name in names) {
                 Greeting(name = name)
             }
+        }
+    }
+}
+
+@Composable
+fun Lesson1Page(
+    modifier: Modifier = Modifier
+) {
+    var shouldShowOnBoarding by remember { mutableStateOf(true) }
+
+    Surface(modifier) {
+        if (shouldShowOnBoarding) {
+            OnBoardingScreen { // 因為只使用最後一個參數是可以使用lambda
+                shouldShowOnBoarding = false
+            }
+        } else {
+            Greetings()
         }
     }
 }
