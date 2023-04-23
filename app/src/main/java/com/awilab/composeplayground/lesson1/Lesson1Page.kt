@@ -1,5 +1,8 @@
 package com.awilab.composeplayground.lesson1
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,12 +29,14 @@ fun Greeting(name: String) {
     // 僅用 mutableStateOf 雖然會更改狀態，但 Recpmposition 隨時發生的，
     // 如果發生的當下未使用 remember 記住當下狀態只使用 mutableStateOf 的話
     // 物件會取用 default value 來使用，並不會取用 recomposition 前的狀態
-    val expanded = remember { mutableStateOf(false) }
-    val extraPadding = if (expanded.value) {
-        48.dp
-    } else {
-        0.dp
-    }
+    val expanded = rememberSaveable { mutableStateOf(false) }
+    val extraPadding by animateDpAsState(
+        targetValue = if (expanded.value) 48.dp else 0.dp,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        )
+    )
 
     Surface(
         color = MaterialTheme.colorScheme.primary,
@@ -41,7 +46,7 @@ fun Greeting(name: String) {
             Column(
                 modifier = Modifier
                     .weight(1f) // 指定佔用 Row 的比例
-                    .padding(bottom = extraPadding)
+                    .padding(bottom = extraPadding.coerceAtLeast(0.dp))
             ) {
                 Text(text = "Hello,")
                 Text(text = name)
