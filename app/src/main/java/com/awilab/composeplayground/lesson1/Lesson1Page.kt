@@ -1,5 +1,6 @@
 package com.awilab.composeplayground.lesson1
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
@@ -20,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.awilab.composeplayground.ui.theme.ComposePlaygroundTheme
@@ -49,7 +51,10 @@ fun Greeting(name: String) {
                     .padding(bottom = extraPadding.coerceAtLeast(0.dp))
             ) {
                 Text(text = "Hello,")
-                Text(text = name)
+                Text(
+                    text = name,
+                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraBold)
+                )
             }
             ElevatedButton(onClick = { expanded.value = expanded.value.not() }) {
                 Text(
@@ -64,18 +69,22 @@ fun Greeting(name: String) {
     }
 }
 
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES, name = "Dark")
+@Preview(showBackground = true)
 @Composable
 fun Greetings(
     modifier: Modifier = Modifier,
     names: List<String> = List(1000) { "$it" }
 ) {
-    Surface(
-        modifier = modifier.padding(vertical = 4.dp),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        LazyColumn(modifier = modifier.padding(vertical = 4.dp)) {
-            items(items = names) { name ->
-                Greeting(name = name)
+    ComposePlaygroundTheme {
+        Surface(
+            modifier = modifier.padding(vertical = 4.dp),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            LazyColumn(modifier = modifier.padding(vertical = 4.dp)) {
+                items(items = names) { name ->
+                    Greeting(name = name)
+                }
             }
         }
     }
@@ -98,7 +107,8 @@ fun Lesson1Page(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES, name = "Dark")
+@Preview(showBackground = true, name = "MainScreen")
 @Composable
 fun GreetingPreview() {
     ComposePlaygroundTheme {
